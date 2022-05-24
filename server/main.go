@@ -1,22 +1,26 @@
 package main
 
 import (
-    "fmt"
-    "html"
-    "log"
-    "net/http"
+	// "fmt"
+	// "html"
+	// "log"
+	// "net/http"
+	"github.com/gin-gonic/gin"
 )
+
+// CURD
+func GetAllUser(ctx *gin.Context) {
+	ctx.JSON(200, gin.H{
+		"message": "ping !",
+	})
+}
 
 func main() {
 
-    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
-    })
+	router := gin.Default()
 
-    http.HandleFunc("/hi", func(w http.ResponseWriter, r *http.Request){
-        fmt.Fprintf(w, "Hi")
-    })
+	router.GET("/", GetAllUser)
 
-    log.Fatal(http.ListenAndServe(":8081", nil))
+	router.Run(":8081")
 
 }

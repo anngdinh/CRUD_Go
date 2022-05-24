@@ -3,4 +3,4 @@ FROM golang:latest
 RUN mkdir /app
 WORKDIR /app
 
-# RUN go mod install
+RUN go mod install
