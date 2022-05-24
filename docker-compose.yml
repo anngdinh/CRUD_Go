@@ -1,0 +1,14 @@
+version: '3'
+services:
+  go:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    command: /bin/sh -c "go run server/main.go"
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app
+    ports:
+      - 8080:8081
+    
