@@ -4,14 +4,16 @@ services:
     build:
       context: .
       dockerfile: server/Dockerfile
-    command: /bin/sh -c "go run server/main.go"
+    # command: /bin/sh -c "go run server/main.go"
     stdin_open: true
     tty: true
     volumes:
       - .:/app
     ports:
       - 8080:8081
-    restart: always
+    networks:
+      - internal
+    # restart: always
 
   db:
     image: mysql:8.0
@@ -22,12 +24,40 @@ services:
       MYSQL_PASSWORD: password
       # TZ: 'Asia/Tokyo'
     # command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    volumes:
-      - db-data:/var/lib/mysql
-      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+    # volumes:
+    #   - db-data:/var/lib/mysql
+    #   - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+    restart: always
+    # ports:
+    #   - 3306:3306
+    networks:
+      - internal
+  proxy:
+    image: nginx
+    # volumes:
+    #   - ./website:/usr/share/nginx/html
     ports:
-      - 3306:3306
+      - 5002:80
+    networks:
+      internal:
+        aliases:
+          - in
+      external:
+        aliases:
+          - ex
+  # test:
+  #   image: busybox
+  #   command: /bin/echo
+  #   ports:
+  #     - 5002:80
+  #   networks:
+  #     - external
 
-volumes:
-  db-data:
-    driver: local
+# volumes:
+#   db-data:
+#     driver: local
+
+
+networks:
+  internal:
+  external:

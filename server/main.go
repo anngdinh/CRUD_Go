@@ -26,7 +26,11 @@ func GetAllUser(ctx *gin.Context) {
 	defer db.Close()
 	
 	var users []User
-	all, _ := db.Query("SELECT * FROM Users")
+	all, err := db.Query("SELECT * FROM Users")
+	if err != nil {
+		fmt.Println("Error when get all Users")
+		return
+	}
 	for all.Next() {
 		var temp User
 		all.Scan(&temp.name, &temp.email)
